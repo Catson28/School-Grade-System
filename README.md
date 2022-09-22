@@ -1,0 +1,1 @@
+# School_Grade_System_-_Django_React_Postgrees_Docker_Nginx
