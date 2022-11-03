@@ -1,0 +1,36 @@
+# docker_tutorial/docker-compose.yml
+
+version: "3"
+services:
+
+  databse:
+    image: postgres:12.7-alpine
+    volumes:
+        - ./backup_data/db:/var/lib/postgresql/data
+    environment:
+        - POSTGRES_DB=schools
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+
+  pgadmin4:
+     image: dpage/pgadmin4
+     restart: always
+     environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+     ports:
+      - "85:80"
+     depends_on:
+     - databse
+
+  appi:
+    build: ./djang
+    volumes:
+      - ./djang:/aplicativio
+    ports:
+      - 8000:8000
+    image: appi:aplicativio
+    container_name: aplicativio_app
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - databse
